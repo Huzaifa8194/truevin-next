@@ -14,7 +14,7 @@ interface Vehicle {
   newdata?: Record<string, string> | Array<Record<string, string>> | string;
   vin_display?: string;
   final_bid?: string;
-  timestamp?: string;
+  timestamp?: string | number;
 }
 
 interface VehicleCardProps {
