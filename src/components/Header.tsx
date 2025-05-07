@@ -47,12 +47,7 @@ const Header = () => {
             >
               Home
             </Link>
-            <Link
-              href="/vehicles"
-              className="text-gray-700 hover:text-indigo-600 text-lg font-medium transition-colors duration-200"
-            >
-              Vehicles
-            </Link>
+           
             <Link
               href="/about"
               className="text-gray-700 hover:text-indigo-600 text-lg font-medium transition-colors duration-200"
