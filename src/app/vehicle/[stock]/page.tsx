@@ -31,18 +31,32 @@ interface Vehicle {
 const API_BASE = 'https://p42429x0l5.execute-api.eu-north-1.amazonaws.com/prod';
 
 async function fetchVehicleBySrKey(sr_key: number): Promise<Vehicle | null> {
-  try {
-    const res = await fetch(`${API_BASE}/sr/${sr_key}`, {
-      headers: { 'x-api-key': process.env.API_KEY || '' },
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) throw new Error('Failed to fetch vehicle');
-    const items: Vehicle[] = await res.json();
-    return items[0] ?? null;
-  } catch (err) {
-    console.error(err);
-    return null;
+  let currentKey = sr_key;
+  const direction = sr_key >= 0 ? 1 : -1;
+  let attempts = 0;
+  const maxAttempts = 100;
+
+  while (attempts < maxAttempts) {
+    try {
+      const res = await fetch(`${API_BASE}/sr/${currentKey}`, {
+        headers: { 'x-api-key': process.env.API_KEY || '' },
+        next: { revalidate: 3600 },
+      });
+      if (!res.ok) throw new Error('Failed to fetch vehicle');
+      const items: Vehicle[] = await res.json();
+      if (items && items.length > 0 && items[0]) {
+        return items[0];
+      }
+      // If no vehicle found, try the next key
+      currentKey += direction;
+      attempts++;
+    } catch (err) {
+      console.error(err);
+      currentKey += direction;
+      attempts++;
+    }
   }
+  return null;
 }
 
 export default function VehicleDetailPage({ params }: { params: { stock: string } }) {
@@ -143,7 +157,7 @@ export default function VehicleDetailPage({ params }: { params: { stock: string 
     if (nextVehicle?.stock_number) {
       router.push(`/vehicle/${nextVehicle.stock_number}`);
     } else {
-      alert(`Vehicle with sr_key ${nextKey} not found.`);
+      alert(`No more vehicles found in this direction.`);
     }
   };
 
@@ -206,7 +220,7 @@ export default function VehicleDetailPage({ params }: { params: { stock: string 
               {safe(vehicle.final_bid)}
             </div>
           </div>
-          <VinDisplay html={vehicle.vin_display || ''} className="prose text-gray-700" />
+          <VinDisplay vin={vehicle.unprocessed_vin || ''} className="prose text-gray-700" />
         </div>
 
         {Object.keys(merged).length > 0 && (
