@@ -25,7 +25,7 @@ interface Vehicle {
   vin_display?: string;
   ocr_result?: string;
   final_bid?: string;
-  timestamp?: string;
+  timestamp?: string | number;
   unprocessed_vin?: string;
   veh_video_link?: string;
   sr_key?: number;
@@ -87,6 +87,31 @@ export default function VehicleDetailPage({ params }: { params: { stock: string 
 
   const safe = (v: any) =>
     v !== undefined && v !== null && v !== '' ? v : 'Not available';
+
+  const formatTimestamp = (timestamp: string | number | undefined): string => {
+    if (!timestamp) return 'Not available';
+    
+    let date;
+    if (typeof timestamp === 'number') {
+      // Handle Unix timestamp (in seconds or milliseconds)
+      date = new Date(timestamp < 10000000000 ? timestamp * 1000 : timestamp);
+    } else {
+      // Handle ISO string format
+      date = new Date(timestamp);
+    }
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) return 'Invalid date';
+    
+    // Format date: "Month DD, YYYY at HH:MM AM/PM"
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   const images = vehicle.allpagedata_images?.length
     ? vehicle.allpagedata_images
@@ -300,6 +325,11 @@ export default function VehicleDetailPage({ params }: { params: { stock: string 
             <div className="text-2xl font-bold text-green-600">
               {safe(vehicle.final_bid)}
             </div>
+            {vehicle.timestamp && (
+              <div className="text-xs text-gray-500 mt-1">
+                Last Updated: {formatTimestamp(vehicle.timestamp)}
+              </div>
+            )}
           </div>
           <VinDisplay vin={vehicle.vin_display || ''} className="prose text-gray-700" />
         </div>
