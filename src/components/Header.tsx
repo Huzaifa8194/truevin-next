@@ -3,101 +3,129 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Menu, X, Car, Search } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
-            <Image
-              src="https://api.dicebear.com/7.x/initials/svg?seed=TrueVin&backgroundColor=4f46e5"
-              alt="TrueVin Logo"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
-              TrueVin
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-600 hover:text-indigo-600 transition-colors">
-              Home
-            </Link>
-            <Link href="/vehicles" className="text-gray-600 hover:text-indigo-600 transition-colors">
-              Vehicles
-            </Link>
-            <Link href="/about" className="text-gray-600 hover:text-indigo-600 transition-colors">
-              About
-            </Link>
-            <Link href="/contact" className="text-gray-600 hover:text-indigo-600 transition-colors">
-              Contact
+    <motion.header
+      className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo & Mobile Toggle */}
+          <div className="flex items-center">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+            <Link href="/" className="flex items-center space-x-3 ml-2 md:ml-0">
+              <motion.div
+                className="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center"
+                whileHover={{ scale: 1.1 }}
+              >
+                <Car className="h-6 w-6 text-white" />
+              </motion.div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-800 bg-clip-text text-transparent">
+                TrueVin
+              </span>
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-gray-600 hover:text-indigo-600"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {isMobileMenuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 space-y-4">
+          {/* Desktop Links + Search */}
+          <div className="hidden md:flex md:items-center md:space-x-10">
             <Link
               href="/"
-              className="block text-gray-600 hover:text-indigo-600 transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-gray-700 hover:text-indigo-600 text-lg font-medium transition-colors duration-200"
             >
               Home
             </Link>
             <Link
               href="/vehicles"
-              className="block text-gray-600 hover:text-indigo-600 transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-gray-700 hover:text-indigo-600 text-lg font-medium transition-colors duration-200"
             >
               Vehicles
             </Link>
             <Link
               href="/about"
-              className="block text-gray-600 hover:text-indigo-600 transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-gray-700 hover:text-indigo-600 text-lg font-medium transition-colors duration-200"
             >
-              About
+              About Us
             </Link>
             <Link
               href="/contact"
-              className="block text-gray-600 hover:text-indigo-600 transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-gray-700 hover:text-indigo-600 text-lg font-medium transition-colors duration-200"
             >
-              Contact
+              Contact Us
             </Link>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search vehicles..."
+                className="pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:outline-none w-64"
+              />
+            </div>
           </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden mt-2 bg-white shadow-lg rounded-lg py-4 space-y-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link
+              href="/"
+              className="block px-6 py-2 text-gray-700 hover:bg-gray-100 hover:text-indigo-600 rounded-lg transition-colors duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/vehicles"
+              className="block px-6 py-2 text-gray-700 hover:bg-gray-100 hover:text-indigo-600 rounded-lg transition-colors duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Vehicles
+            </Link>
+            <Link
+              href="/about"
+              className="block px-6 py-2 text-gray-700 hover:bg-gray-100 hover:text-indigo-600 rounded-lg transition-colors duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              About Us
+            </Link>
+            <Link
+              href="/contact" 
+              className="block px-6 py-2 text-gray-700 hover:bg-gray-100 hover:text-indigo-600 rounded-lg transition-colors duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contact Us
+            </Link>
+            <div className="px-6">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search vehicles..."
+                  className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:outline-none"
+                />
+              </div>
+            </div>
+          </motion.div>
         )}
-      </nav>
-    </header>
+      </div>
+    </motion.header>
   );
 };
 
