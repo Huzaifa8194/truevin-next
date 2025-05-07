@@ -1,0 +1,1 @@
+{"kind":"FETCH","data":{"headers":{"apigw-requestid":"KMnOdjKkgi0EPog=","connection":"keep-alive","content-length":"2","content-type":"application/json","date":"Wed, 07 May 2025 12:30:20 GMT"},"body":"W10=","status":200,"url":"https://p42429x0l5.execute-api.eu-north-1.amazonaws.com/prod/stocks/search?make=toyotta&model=corolla&year=2005"},"revalidate":3600,"tags":[]}

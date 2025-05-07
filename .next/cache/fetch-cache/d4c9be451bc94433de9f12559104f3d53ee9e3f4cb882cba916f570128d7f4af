@@ -1,0 +1,1 @@
+{"kind":"FETCH","data":{"headers":{"apigw-requestid":"KMmV2ghcgi0EPHA=","connection":"keep-alive","content-length":"2","content-type":"application/json","date":"Wed, 07 May 2025 12:24:18 GMT"},"body":"W10=","status":200,"url":"https://p42429x0l5.execute-api.eu-north-1.amazonaws.com/prod/stocks/search?make=ford&model=f150&year=2005"},"revalidate":3600,"tags":[]}
