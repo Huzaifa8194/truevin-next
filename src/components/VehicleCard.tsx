@@ -87,7 +87,7 @@ export function VehicleCard({ vehicle: v }: VehicleCardProps) {
           <p className="text-gray-600">
             Stock #{v.stock_number}
           </p>
-          <VinDisplay html={v.vin_display || ''} />
+          <VinDisplay vin={v.vin_display || ''} />
           <div className="flex items-center justify-between">
             <span className="text-2xl font-bold text-emerald-600">
               ${safeDisplay(v.final_bid)}
