@@ -41,7 +41,7 @@ export function VehicleCard({ vehicle: v }: VehicleCardProps) {
         JSON.parse(v.details).forEach(copy);
       } catch {}
     } else if (Array.isArray(v.details)) {
-      v.details.forEach(copy);
+      (v.details as Array<Record<string, string>>).forEach(copy);
     } else if (typeof v.details === 'object') {
       Object.entries(v.details).forEach(([k, val]) => {
         if (fields[k] === undefined || fields[k] === '')
